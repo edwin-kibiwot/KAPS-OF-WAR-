@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#071a35">
+  <title>Kenya Schools Challenge</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: white;
+      background: linear-gradient(135deg, #071a35, #123b55);
+      min-height: 100vh;
+    }
+
+    header {
+      text-align: center;
+      padding: 25px 12px;
+      background: #050f20;
+      border-bottom: 3px solid #20e3a2;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 27px;
+    }
+
+    header p {
+      color: #b7d9e8;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 25px auto;
+      padding: 16px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 22px;
+      margin-bottom: 18px;
+      border-radius: 18px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      color: #20e3a2;
+      margin-top: 0;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      margin: 12px 0;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 13px 16px;
+      margin: 5px 0;
+      width: 100%;
+      border: none;
+      border-radius: 10px;
+      background: #20e3a2;
+      color: #071a35;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:hover {
+      opacity: 0.88;
+    }
+
+    .answer {
+      background: #183b55;
+      color: white;
+      border: 1px solid #20e3a2;
+      text-align: left;
+    }
+
+    .answer:disabled {
+      cursor: default;
+      opacity: 0.8;
+    }
+
+    .secondary {
+      background: #ffcc66;
+    }
+
+    .muted {
+      color: #bfd0dd;
+      font-size: 14px;
+    }
+
+    #gameScreen,
+    #resultScreen {
+      display: none;
+    }
+
+    #feedback {
+      font-weight: bold;
+      min-height: 24px;
+    }
+
+    .score {
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #bfd0dd;
+    }
+
+    ol li {
+      padding: 7px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>🇰🇪 KENYA SCHOOLS CHALLENGE</h1>
+    <p>One Nation. Many Schools. One Champion.</p>
+  </header>
+
+  <main class="container">
+
+    <section class="card" id="welcomeScreen">
+      <h2>🎮 Welcome, Champion!</h2>
+
+      <p>
+        Represent your school, answer questions,
+        earn points and challenge yourself!
+      </p>
+
+      <input
+        id="playerName"
+        type="text"
+        maxlength="20"
+        placeholder="Enter your player name"
+      >
+
+      <input
+        id="schoolName"
+        type="text"
+        maxlength="60"
+        placeholder="Enter your school name"
+      >
+
+      <button onclick="startGame()">START CHALLENGE 🚀</button>
+
+      <p class="muted">
+        Your score is saved on this device.
+        This version does not connect students in real time.
+      </p>
+    </section>
+
+    <section class="card" id="gameScreen">
+      <p id="playerInfo"></p>
+
+      <p id="progress" class="muted"></p>
+
+      <div class="score">
+        ⭐ Score: <span id="score">0</span>
+      </div>
+
+      <h2 id="question"></h2>
+
+      <div id="answers"></div>
+
+      <p id="feedback" aria-live="polite"></p>
+
+      <button id="nextButton" onclick="nextQuestion()" hidden>
+        NEXT QUESTION ➡️
+      </button>
+    </section>
+
+    <section class="card" id="resultScreen">
+      <h2>🏆 Challenge Complete!</h2>
+
+      <p id="resultMessage"></p>
+
+      <p class="score">
+        Your score: <span id="finalScore"></span>
+      </p>
+
+      <button onclick="startGame()">PLAY AGAIN 🔄</button>
+
+      <button class="secondary" onclick="showLeaderboard()">
+        VIEW LOCAL LEADERBOARD 🥇
+      </button>
+
+      <button class="answer" onclick="shareResult()">
+        SHARE MY RESULT 📲
+      </button>
+    </section>
+
+    <section class="card" id="leaderboardScreen" hidden>
+      <h2>🥇 Local Leaderboard</h2>
+
+      <p class="muted">
+        These scores are saved only in this browser on this device.
+      </p>
+
+      <ol id="leaderboard"></ol>
+
+      <button onclick="hideLeaderboard()">BACK</button>
+
+      <button class="answer" onclick="clearLeaderboard()">
+        CLEAR LOCAL SCORES
+      </button>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Made for Kapsowar Boys High School and students across Kenya 🇰🇪</p>
+    <p>Learn • Play • Compete • Connect</p>
+  </footer>
+
+  <script>
+    const questions = [
+      {
+        q: "What is the capital city of Kenya?",
+        options: ["Mombasa", "Nairobi", "Kisumu", "Nakuru"],
+        answer: 1
+      },
+      {
+        q: "Which is the highest mountain in Kenya?",
+        options: ["Mount Elgon", "Longonot", "Mount Kenya", "Aberdare"],
+        answer: 2
+      },
+      {
+        q: "What is the currency of Kenya?",
+        options: ["Naira", "Dollar", "Kenyan shilling", "Rand"],
+        answer: 2
+      },
+      {
+        q: "How many days are in a normal week?",
+        options: ["Five", "Six", "Seven", "Eight"],
+        answer: 2
+      },
+      {
+        q: "Which ocean borders Kenya?",
+        options: [
+          "Atlantic Ocean",
+          "Indian Ocean",
+          "Arctic Ocean",
+          "Southern Ocean"
+        ],
+        answer: 1
+      },
+      {
+        q: "Which animal is featured on Kenya's coat of arms?",
+        options: ["Lion", "Elephant", "Giraffe", "Zebra"],
+        answer: 0
+      },
+      {
+        q: "Which is the largest planet in our solar system?",
+        options: ["Earth", "Mars", "Jupiter", "Venus"],
+        answer: 2
+      },
+      {
+        q: "What is the chemical symbol for water?",
+        options: ["CO2", "O2", "H2O", "NaCl"],
+        answer: 2
+      },
+      {
+        q: "Which organ pumps blood around the human body?",
+        options: ["Lungs", "Heart", "Kidneys", "Stomach"],
+        answer: 1
+      },
+      {
+        q: "Which language is widely spoken in Kenya alongside English?",
+        options: ["Swahili", "French", "German", "Portuguese"],
+        answer: 0
+      }
+    ];
+
+    let player = "";
+    let school = "";
+    let score = 0;
+    let currentQuestion = 0;
+    let locked = false;
+    let gameQuestions = [];
+
+    function startGame() {
+      const nameInput = document.getElementById("playerName").value.trim();
+      const schoolInput = document.getElementById("schoolName").value.trim();
+
+      if (!nameInput || !schoolInput) {
+        alert("Please enter your player name and school.");
+        return;
+      }
+
+      player = nameInput;
+      school = schoolInput;
+      score = 0;
+      currentQuestion = 0;
+
+      gameQuestions = [...questions].sort(() => Math.random() - 0.5);
+
+      document.getElementById("welcomeScreen").style.display = "none";
+      document.getElementById("resultScreen").style.display = "none";
+      document.getElementById("leaderboardScreen").hidden = true;
+      document.getElementById("gameScreen").style.display = "block";
+
+      document.getElementById("playerInfo").textContent =
+        "👤 " + player + " | 🏫 " + school;
+
+      document.getElementById("score").textContent = score;
+
+      showQuestion();
+    }
+
+    function showQuestion() {
+      locked = false;
+
+      const item = gameQuestions[currentQuestion];
+
+      document.getElementById("progress").textContent =
+        "Question " + (currentQuestion + 1) +
+        " of " + gameQuestions.length;
+
+      document.getElementById("question").textContent = item.q;
+
+      document.getElementById("feedback").textContent = "";
+      document.getElementById("nextButton").hidden = true;
+
+      const answers = document.getElementById("answers");
+      answers.replaceChildren();
+
+      item.options.forEach((option, index) => {
+        const button = document.createElement("button");
+
+        button.className = "answer";
+        button.textContent = option;
+        button.onclick = () => checkAnswer(index, button);
+
+        answers.appendChild(button);
+      });
+    }
+
+    function checkAnswer(index, selectedButton) {
+      if (locked) return;
+
+      locked = true;
+
+      const item = gameQuestions[currentQuestion];
+      const buttons = document.querySelectorAll("#answers button");
+
+      buttons.forEach(button => button.disabled = true);
+
+      if (index === item.answer) {
+        score += 10;
+
+        document.getElementById("feedback").textContent =
+          "✅ Correct! You earned 10 points!";
+      } else {
+        document.getElementById("feedback").textContent =
+          "❌ Not quite! Correct answer: " + item.options[item.answer];
+      }
+
+      document.getElementById("score").textContent = score;
+
+      document.getElementById("nextButton").hidden = false;
+
+      if (currentQuestion === gameQuestions.length - 1) {
+        document.getElementById("nextButton").textContent = "SEE RESULTS 🏆";
+      } else {
+        document.getElementById("nextButton").textContent = "NEXT QUESTION ➡️";
+      }
+    }
+
+    function nextQuestion() {
+      if (!locked) return;
+
+      currentQuestion++;
+
+      if (currentQuestion >= gameQuestions.length) {
+        finishGame();
+      } else {
+        showQuestion();
+      }
+    }
+
+    function getScores() {
+      try {
+        return JSON.parse(localStorage.getItem("kenyaSchoolsScores")) || [];
+      } catch {
+        return [];
+      }
+    }
+
+    function finishGame() {
+      document.getElementById("gameScreen").style.display = "none";
+      document.getElementById("resultScreen").style.display = "block";
+
+      document.getElementById("finalScore").textContent =
+        score + " / " + (gameQuestions.length * 10);
+
+      document.getElementById("resultMessage").textContent =
+        "Great effort, " + player + " from " + school + "!";
+
+      const scores = getScores();
+
+      scores.push({
+        player: player,
+        school: school,
+        score: score,
+        date: new Date().toLocaleDateString()
+      });
+
+      scores.sort((a, b) => b.score - a.score);
+
+      try {
+        localStorage.setItem(
+          "kenyaSchoolsScores",
+          JSON.stringify(scores.slice(0, 50))
+        );
+      } catch {
+        alert("Your browser could not save the score.");
+      }
+    }
+
+    function showLeaderboard() {
+      document.getElementById("leaderboardScreen").hidden = false;
+
+      const list = document.getElementById("leaderboard");
+      list.replaceChildren();
+
+      const scores = getScores();
+
+      if (!scores.length) {
+        const li = document.createElement("li");
+        li.textContent = "No scores yet. Play a game first!";
+        list.appendChild(li);
+      }
+
+      scores.forEach((entry, index) => {
+        const li = document.createElement("li");
+
+        li.textContent =
+          (index + 1) + ". " + entry.player +
+          " — " + entry.school +
+          " — " + entry.score + " points";
+
+        list.appendChild(li);
+      });
+    }
+
+    function hideLeaderboard() {
+      document.getElementById("leaderboardScreen").hidden = true;
+    }
+
+    function clearLeaderboard() {
+      if (confirm("Delete all scores saved on this device?")) {
+        localStorage.removeItem("kenyaSchoolsScores");
+        showLeaderboard();
+      }
+    }
+
+    async function shareResult() {
+      const message =
+        "🇰🇪 Kenya Schools Challenge\n" +
+        "Player: " + player + "\n" +
+        "School: " + school + "\n" +
+        "Score: " + score + "/" + (gameQuestions.length * 10) +
+        "\nCan you beat my score?";
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "Kenya Schools Challenge", text: message });
+        } catch (error) {
+          if (error.name !== "AbortError") {
+            alert(message);
+          }
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(message);
+          alert("Result copied! You can paste it into WhatsApp.");
+        } catch {
+          alert(message);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
