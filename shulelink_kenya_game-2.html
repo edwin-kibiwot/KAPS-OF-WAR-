@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#071b35">
+<title>ShuleLink Kenya — School Challenge</title>
+<style>
+:root{--navy:#071b35;--blue:#123d70;--green:#16a34a;--gold:#fbbf24;--ink:#10233f;--muted:#64748b;--paper:#f3f7fc;--white:#fff;--line:#dbe5f1}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(130deg,#06162c,#123d70);color:#fff;padding:22px 16px 30px}
+.wrap{max-width:980px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:48px;height:48px;border-radius:15px;background:var(--gold);color:var(--navy);display:grid;place-items:center;font-size:25px;font-weight:900}
+h1{font-size:clamp(1.55rem,4vw,2.35rem);margin:0;letter-spacing:-.04em}.tag{color:#d7e8ff;margin:5px 0 0;font-size:.95rem}
+.pill{border:1px solid #8bb4e4;border-radius:999px;padding:8px 12px;font-size:.82rem;color:#e4efff}
+.hero{padding:24px 0 0;max-width:650px}.hero h2{font-size:clamp(1.8rem,5vw,3.2rem);line-height:1.06;margin:0 0 12px}.hero p{color:#d7e8ff;line-height:1.6;margin:0}
+main{padding:22px 14px 40px}.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+.card{background:var(--white);border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 8px 25px #0c2b4d0b}
+.card h3{margin:0 0 14px;font-size:1.15rem}.field{margin:0 0 13px}.field label{display:block;font-weight:700;font-size:.88rem;margin-bottom:6px}
+input,select{width:100%;border:1px solid #cbd8e8;border-radius:11px;padding:12px;font:inherit;background:#fff;color:var(--ink);outline:none}
+input:focus,select:focus{border-color:#2563eb;box-shadow:0 0 0 3px #2563eb1a}
+button{font:inherit;font-weight:750;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;transition:transform .12s,opacity .12s}
+button:active{transform:scale(.98)}button:disabled{opacity:.45;cursor:not-allowed}
+.primary{background:var(--green);color:#fff;width:100%}.secondary{background:#eaf2fc;color:#123d70}.gold{background:var(--gold);color:#172033}
+.note{font-size:.82rem;color:var(--muted);line-height:1.5}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:14px 0}
+.stat{background:#f0f6ff;border-radius:13px;padding:12px;text-align:center}.stat strong{display:block;font-size:1.25rem;color:#123d70}.stat span{font-size:.75rem;color:var(--muted)}
+.list{padding-left:20px;line-height:1.8;margin:0}.badge{display:inline-block;background:#e8f7ed;color:#166534;border-radius:999px;padding:5px 9px;font-size:.75rem;font-weight:800}
+.game{display:none}.game.active{display:block}.setup.hidden{display:none}.game-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.progress{height:8px;background:#e6edf6;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress div{height:100%;background:var(--green);width:0;transition:width .25s}
+.question{font-size:1.35rem;font-weight:800;line-height:1.35;margin:10px 0 18px}.answers{display:grid;gap:10px}.answer{background:#f5f8fc;border:1px solid #dbe5f1;text-align:left;color:var(--ink);font-weight:650}.answer:hover{border-color:#2563eb;background:#eef5ff}.answer.correct{background:#dcfce7;border-color:#16a34a}.answer.wrong{background:#fee2e2;border-color:#ef4444}
+.feedback{min-height:28px;font-weight:750;margin:13px 0}.row{display:flex;gap:10px;flex-wrap:wrap}.row button{flex:1}.result{text-align:center;padding:12px 0}.big-score{font-size:3rem;font-weight:900;color:#123d70;line-height:1.1;margin:8px 0}.leader-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:.9rem}.leader-row:last-child{border-bottom:0}.empty{color:var(--muted);font-size:.9rem;line-height:1.5}
+footer{text-align:center;color:var(--muted);font-size:.82rem;padding:20px 14px 35px}
+@media(max-width:740px){.grid{grid-template-columns:1fr}.card{padding:17px}.hero{padding-top:20px}.pill{font-size:.75rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="top">
+    <div class="brand"><div class="logo">SL</div><div><h1>ShuleLink Kenya</h1><p class="tag">One nation. Many schools. One challenge.</p></div></div>
+    <span class="pill">🇰🇪 Made for Kenyan students</span>
+  </div>
+  <section class="hero"><h2>Represent your school.<br>Challenge Kenya.</h2><p>Play a quick quiz, earn points, and show your school spirit. Invite classmates and students from other schools to try the challenge too.</p></section>
+</div></header>
+<main class="wrap">
+<div class="grid">
+<section class="card">
+  <div class="setup" id="setup">
+    <h3>🎮 Enter the challenge</h3>
+    <div class="field"><label for="player">Your nickname</label><input id="player" maxlength="22" placeholder="e.g. KapsowarStar" autocomplete="nickname"></div>
+    <div class="field"><label for="school">School name</label><input id="school" maxlength="60" value="Kapsowar Boys High School" placeholder="Type your school"></div>
+    <div class="field"><label for="county">County</label><select id="county"><option value="">Choose your county</option></select></div>
+    <div class="field"><label for="category">Challenge category</label><select id="category"><option value="mixed">Mixed Kenya Challenge</option><option value="geography">Geography & Kenya</option><option value="school">School Smarts</option></select></div>
+    <button class="primary" id="start">Start playing 🚀</button>
+    <p class="note">Use a nickname; don't enter passwords, phone numbers, or other private information.</p>
+  </div>
+  <div class="game" id="game">
+    <div class="game-top"><span class="badge" id="gameSchool">Your school</span><span class="note" id="counter">Question 1 of 10</span></div>
+    <div class="progress"><div id="bar"></div></div>
+    <div class="question" id="question"></div>
+    <div class="answers" id="answers"></div>
+    <div class="feedback" id="feedback" aria-live="polite"></div>
+    <div class="row"><button class="secondary" id="next" disabled>Next question →</button><button class="secondary" id="quit">Exit</button></div>
+  </div>
+  <div class="game" id="result">
+    <div class="result"><div style="font-size:2.5rem">🏆</div><h3>Challenge complete!</h3><div class="big-score" id="finalScore">0/10</div><p id="resultText">Great effort!</p><p class="note">Your result is saved on this device only.</p></div>
+    <div class="row"><button class="primary" id="again">Play again</button><button class="secondary" id="share">Share challenge</button></div>
+    <button class="secondary" style="width:100%;margin-top:10px" id="home">Back to home</button>
+  </div>
+</section>
+<aside>
+  <section class="card">
+    <h3>📊 This device's scoreboard</h3>
+    <div class="stats"><div class="stat"><strong id="plays">0</strong><span>Attempts</span></div><div class="stat"><strong id="best">0</strong><span>Best score</span></div><div class="stat"><strong id="schools">0</strong><span>Schools played</span></div></div>
+    <div id="leaderboard"><p class="empty">Your completed games will appear here on this device.</p></div>
+    <button class="secondary" style="width:100%;margin-top:12px" id="shareTop">Invite another school 🔗</button>
+  </section>
+  <section class="card" style="margin-top:18px">
+    <h3>🌍 How to connect schools</h3>
+    <ol class="list"><li>Publish this game on GitHub Pages.</li><li>Share the public game link with students.</li><li>Students enter their school and play.</li></ol>
+    <p class="note">Important: this starter version runs in each student's browser. A truly shared national leaderboard, accounts, chat, or live multiplayer needs a secure online database/backend.</p>
+  </section>
+</aside>
+</div>
+</main>
+<footer>ShuleLink Kenya • Learn, play, and connect respectfully 🇰🇪</footer>
+<script>
+const counties = ["Baringo","Bomet","Bungoma","Busia","Elgeyo-Marakwet","Embu","Garissa","Homa Bay","Isiolo","Kajiado","Kakamega","Kericho","Kiambu","Kilifi","Kirinyaga","Kisii","Kisumu","Kitui","Kwale","Laikipia","Lamu","Machakos","Makueni","Mandera","Marsabit","Meru","Migori","Mombasa","Murang'a","Nairobi","Nakuru","Nandi","Narok","Nyamira","Nyandarua","Nyeri","Samburu","Siaya","Taita-Taveta","Tana River","Tharaka-Nithi","Trans Nzoia","Turkana","Uasin Gishu","Vihiga","Wajir","West Pokot"];
+const countySelect=document.getElementById('county');
+counties.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;countySelect.appendChild(o)});
+const questions = [
+{c:"geography",q:"What is the capital city of Kenya?",a:["Nairobi","Mombasa","Kisumu","Nakuru"],k:0,e:"Nairobi is Kenya's capital city."},
+{c:"geography",q:"Which is the highest mountain in Kenya?",a:["Mount Elgon","Mount Kenya","Longonot","Aberdare Range"],k:1,e:"Mount Kenya is the country's highest mountain."},
+{c:"geography",q:"Which lake is shared by Kenya, Uganda, and Tanzania?",a:["Lake Turkana","Lake Naivasha","Lake Victoria","Lake Baringo"],k:2,e:"Lake Victoria is shared by the three countries."},
+{c:"geography",q:"How many counties does Kenya have?",a:["37","42","47","50"],k:2,e:"Kenya has 47 counties."},
+{c:"geography",q:"Which ocean borders Kenya to the southeast?",a:["Atlantic Ocean","Indian Ocean","Pacific Ocean","Arctic Ocean"],k:1,e:"Kenya has a coastline along the Indian Ocean."},
+{c:"school",q:"What is 12 × 8?",a:["86","96","108","88"],k:1,e:"12 multiplied by 8 equals 96."},
+{c:"school",q:"Which gas do plants absorb during photosynthesis?",a:["Oxygen","Nitrogen","Carbon dioxide","Hydrogen"],k:2,e:"Plants use carbon dioxide, water, and light in photosynthesis."},
+{c:"school",q:"Which word is a noun?",a:["Quickly","Beautiful","Run","Teacher"],k:3,e:"Teacher names a person, so it is a noun."},
+{c:"school",q:"What is the process of water changing into vapour called?",a:["Condensation","Evaporation","Freezing","Melting"],k:1,e:"Evaporation changes liquid water into vapour."},
+{c:"school",q:"Which planet is known as the Red Planet?",a:["Venus","Jupiter","Mars","Mercury"],k:2,e:"Iron-rich dust gives Mars its reddish appearance."},
+{c:"mixed",q:"Which is Kenya's national currency?",a:["Ugandan shilling","Kenyan shilling","Tanzanian shilling","Rwanda franc"],k:1,e:"Kenya uses the Kenyan shilling (KSh)."},
+{c:"mixed",q:"What are Kenya's national colours commonly shown on the flag?",a:["Blue, white, red","Black, red, green, white","Green, yellow, blue","Black, orange, purple"],k:1,e:"The flag features black, red, and green with white edges."},
+{c:"mixed",q:"Which institution makes laws for Kenya at the national level?",a:["Parliament","The Supreme Court alone","County assembly only","National museum"],k:0,e:"The National Assembly and Senate make up Parliament."},
+{c:"mixed",q:"Which sport is Kenya especially famous for internationally?",a:["Ice hockey","Distance running","Cricket only","Baseball"],k:1,e:"Kenyan athletes are renowned for distance running."},
+{c:"mixed",q:"What is the name of Kenya's national anthem?",a:["Ee Mungu Nguvu Yetu","Mungu ni Mwema","Kenya Yetu","Wimbo wa Uhuru"],k:0,e:"The national anthem begins 'Ee Mungu Nguvu Yetu'."},
+{c:"mixed",q:"Which language, alongside English, is an official language of Kenya?",a:["French","Kiswahili","Arabic","Portuguese"],k:1,e:"Kiswahili and English are Kenya's official languages."},
+{c:"mixed",q:"What is the main purpose of a school library?",a:["Only to store sports gear","To support reading and research","To sell uniforms","To hold examinations only"],k:1,e:"Libraries help students read, learn, and research."},
+{c:"mixed",q:"Which action is best for respectful online school competition?",a:["Insult rival schools","Share classmates' private details","Celebrate fairly and respectfully","Cheat to win"],k:2,e:"Friendly competition should be safe and respectful."}
+];
+let deck=[],index=0,score=0,locked=false,profile={};
+const $=id=>document.getElementById(id);
+function getScores(){try{return JSON.parse(localStorage.getItem('shulelinkScores')||'[]')}catch{return []}}
+function saveScores(rows){localStorage.setItem('shulelinkScores',JSON.stringify(rows.slice(0,20)))}
+function refreshBoard(){
+ const rows=getScores();$('plays').textContent=rows.length;$('best').textContent=rows.length?Math.max(...rows.map(r=>r.score)):0;$('schools').textContent=new Set(rows.map(r=>r.school.toLowerCase())).size;
+ const board=$('leaderboard');board.innerHTML='';
+ if(!rows.length){board.innerHTML='<p class="empty">Your completed games will appear here on this device.</p>';return}
+ rows.slice().sort((a,b)=>b.score-a.score).slice(0,5).forEach((r,i)=>{const div=document.createElement('div');div.className='leader-row';const left=document.createElement('span');left.textContent=`${i+1}. ${r.name} · ${r.school}`;const right=document.createElement('strong');right.textContent=`${r.score}/10`;div.append(left,right);board.appendChild(div)})
+}
+function show(view){['setup','game','result'].forEach(id=>$(id).classList.toggle('active',id===view));$('setup').classList.toggle('hidden',view!=='setup')}
+function startGame(){
+ const name=$('player').value.trim(),school=$('school').value.trim(),county=$('county').value;
+ if(!name||!school||!county){alert('Please enter a nickname, school name, and county.');return}
+ profile={name,school,county};const cat=$('category').value;
+ let pool=questions.filter(q=>cat==='mixed'?q.c==='mixed'||q.c==='geography'||q.c==='school':q.c===cat);
+ pool=pool.sort(()=>Math.random()-.5);deck=pool.slice(0,10);index=0;score=0;show('game');renderQuestion()
+}
+function renderQuestion(){
+ locked=false;const q=deck[index];$('counter').textContent=`Question ${index+1} of ${deck.length}`;$('bar').style.width=`${index/deck.length*100}%`;$('question').textContent=q.q;$('gameSchool').textContent=`${profile.school} · ${profile.county}`;$('feedback').textContent='';$('next').disabled=true;$('next').textContent=index===deck.length-1?'See results 🏁':'Next question →';
+ const box=$('answers');box.innerHTML='';
+ q.a.forEach((answer,i)=>{const b=document.createElement('button');b.className='answer';b.textContent=`${String.fromCharCode(65+i)}. ${answer}`;b.addEventListener('click',()=>choose(i));box.appendChild(b)})
+}
+function choose(choice){
+ if(locked)return;locked=true;const q=deck[index],buttons=[...$('answers').children];buttons.forEach((b,i)=>{b.disabled=true;if(i===q.k)b.classList.add('correct');if(i===choice&&i!==q.k)b.classList.add('wrong')});
+ if(choice===q.k){score++;$('feedback').textContent='✅ Correct! '+q.e}else $('feedback').textContent='💡 Not quite. '+q.e;
+ $('next').disabled=false;$('bar').style.width=`${(index+1)/deck.length*100}%`
+}
+function nextQuestion(){if(!locked)return;if(index<deck.length-1){index++;renderQuestion()}else finish()}
+function finish(){
+ show('result');$('finalScore').textContent=`${score}/${deck.length}`;const message=score>=8?'Outstanding! Your school spirit is strong. 🔥':score>=5?'Good effort! Keep learning and come back stronger. 💪':'Every champion starts by learning. Try again! 📚';$('resultText').textContent=`${profile.name} from ${profile.school}: ${message}`;
+ const rows=getScores();rows.unshift({name:profile.name,school:profile.school,county:profile.county,score,when:Date.now()});saveScores(rows);refreshBoard()
+}
+async function shareGame(){
+ const text=`🇰🇪 Join me on ShuleLink Kenya — the school challenge game! Represent your school and test your knowledge. ${location.href}`;
+ try{if(navigator.share)await navigator.share({title:'ShuleLink Kenya',text,url:location.href});else if(navigator.clipboard){await navigator.clipboard.writeText(text);alert('Invite text copied! Paste it into WhatsApp or your school group.')}else prompt('Copy this invite:',text)}catch(e){}
+}
+$('start').addEventListener('click',startGame);$('next').addEventListener('click',nextQuestion);$('quit').addEventListener('click',()=>show('setup'));$('again').addEventListener('click',startGame);$('home').addEventListener('click',()=>show('setup'));$('share').addEventListener('click',shareGame);$('shareTop').addEventListener('click',shareGame);
+refreshBoard();
+</script>
+</body>
+</html>
